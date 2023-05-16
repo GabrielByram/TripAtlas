@@ -1,0 +1,23 @@
+{
+  "name": "trip_atlas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielByram/TripAtlas.git"
+  },
+  "author": "Gabriel Byram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GabrielByram/TripAtlas/issues"
+  },
+  "homepage": "https://github.com/GabrielByram/TripAtlas#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.1.1"
+  }
+}
