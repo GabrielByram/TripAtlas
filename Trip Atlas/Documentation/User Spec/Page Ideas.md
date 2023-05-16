@@ -29,6 +29,7 @@ Provide detailed information about each destination, including photos, reviews, 
 ## Trip Planning and Itinerary Generation:
 
 Use AI algorithms to suggest customized trip itineraries based on user preferences and historical data
+Maybe use Expedia or TripAdvisor data to get hotel and flight data and suggestions?
 Provide options for users to tweak the itinerary based on their own preferences and constraints
 Include hotel and amenity suggestions based on web scraping and user preferences
 
@@ -36,7 +37,7 @@ Include hotel and amenity suggestions based on web scraping and user preferences
 
 Show users the trips that they have been on
 Use graphs or other data visualizations to help users track their travel history and preferences over time
-Allow users to rate and provide feedback on destinations, hotels, and activities
+Allow users to rate and provide feedback on destinations, hotels, and activities via integration with google reviews
 Use this feedback to improve the app's recommendation engine over time
 Provide users with a personalized "favorites" list of top-rated destinations and activities
 
