@@ -10,7 +10,7 @@ STRETCH GOAL: Users can place on map and rate the destinations they have visited
 
 ## User Registration and Login Pages:
 
-Create a simple registration process with fields for name, email, and password
+Create a simple registration process with fields for email and password
 Include a "forgot password" option for users who need to reset their password
 Make it easy for users to log in or register using their social media accounts
 
