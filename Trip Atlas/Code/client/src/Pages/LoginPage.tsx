@@ -4,6 +4,7 @@ import { Container, Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
+  const [emailValid, setEmailValid] = useState(true);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
@@ -11,7 +12,9 @@ const LoginPage = () => {
   const handleContinue = () => {
     // Perform email validation and check if it exists in the database
     // Set isNewUser based on whether the email is found in the database
-    setIsNewUser(true); // For demonstration purposes, set isNewUser to true
+    if (validateEmail()) {
+      setIsNewUser(true); // For demonstration purposes, set isNewUser to true
+    }
   };
 
   const handleLogin = () => {
@@ -29,6 +32,13 @@ const LoginPage = () => {
     setShowPassword(e.target.checked);
   }
 
+  const validateEmail = () => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const isValid = emailRegex.test(email) 
+    setEmailValid(isValid);
+    return isValid;
+  };
+
   return (
     <Container className="d-flex flex-column align-items-center mt-5">
       <h1 className="text-center">LOGIN</h1>
@@ -39,8 +49,10 @@ const LoginPage = () => {
             type="email"
             placeholder="Enter email"
             value={email}
+            isInvalid={!emailValid}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {!emailValid && <Form.Control.Feedback type="invalid">Please enter a valid email address.</Form.Control.Feedback>}
         </Form.Group>
         {!isNewUser ? (
           <div>
@@ -66,7 +78,6 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-
               </Form.Group>
               <Form.Group controlId="formRememberMe">
                 <div className="d-flex justify-content-between">
