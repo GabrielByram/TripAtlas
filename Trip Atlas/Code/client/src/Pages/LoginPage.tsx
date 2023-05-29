@@ -24,6 +24,11 @@ const LoginPage = () => {
     // Redirect or perform necessary actions after successful account creation
   };
 
+  const handleShowPasswordToggle = (e: any) => {
+    console.log(e);
+    setShowPassword(e.target.checked);
+  }
+
   return (
     <Container className="d-flex flex-column align-items-center mt-5">
       <h1 className="text-center">LOGIN</h1>
@@ -66,9 +71,12 @@ const LoginPage = () => {
               <Form.Group controlId="formRememberMe">
                 <div className="d-flex justify-content-between">
                     <Form.Check type="checkbox" label="Remember me" />
-                    <Button variant="link" style={{float: "right", padding: "0", marginTop: "-5px"}}>
-                      Forgot Password?
-                    </Button>
+                    <div>
+                      <Form.Check type="checkbox" label="Show Password" onClick={(e) => handleShowPasswordToggle(e)}/>
+                      <Button variant="link" style={{float: "right", padding: "0", marginTop: "-5px"}}>
+                        Forgot Password?
+                      </Button>
+                    </div>
                 </div>
               </Form.Group>
             </div>
