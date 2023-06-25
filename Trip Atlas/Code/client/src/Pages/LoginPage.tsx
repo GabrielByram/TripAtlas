@@ -1,6 +1,7 @@
 import "./LoginPage.css"
 import { useState } from 'react';
 import { Container, Form, Button, ButtonGroup, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -9,29 +10,49 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
 
-  const handleContinue = () => {
-    // Perform email validation and check if it exists in the database
-    // Set isNewUser based on whether the email is found in the database
+  // Perform email validation and check if it exists in the database
+  // Set isNewUser based on whether the email is found in the database
+  const handleContinue = async () => {
     if (validateEmail()) {
-      setIsNewUser(true); // For demonstration purposes, set isNewUser to true
+      try {
+        const response = await axios.post('/api/checkEmail', { email }); // Replace '/api/checkEmail' with actual API endpoint once created
+        const { isNewUser } = response.data; // Assuming the response from the server includes a data property 'isNewUser'
+  
+        setIsNewUser(isNewUser);
+      } catch (error) {
+        console.log('Error checking email:', error);
+      }
     }
   };
 
-  const handleLogin = () => {
-    // Perform login with the email and password
-    // Redirect or perform necessary actions after successful login
+  // Logs user into their account if credentials are verified in back-end
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('/api/login', { email, password }); // Replace '/api/login' with actual API endpoint for login
+      // Handle the response or perform necessary actions after successful login
+    } catch (error) {
+      console.log('Error logging in:', error);
+    }
   };
 
-  const handleCreateAccount = () => {
-    // Perform account creation with the email and password
-    // Redirect or perform necessary actions after successful account creation
+  // Creates a user's account if credentials are verified in back-end
+  const handleCreateAccount = async () => {
+    try {
+      const response = await axios.post('/api/createAccount', { email, password }); // Replace '/api/createAccount' with your actual API endpoint for account creation
+      // Handle the response or perform necessary actions after successful account creation
+    } catch (error) {
+      console.log('Error creating account:', error);
+    }
   };
+  
 
+  // Toggles between showing password in password input
   const handleShowPasswordToggle = (e: any) => {
     console.log(e);
     setShowPassword(e.target.checked);
   }
 
+  // Check if input email is in correct email format
   const validateEmail = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const isValid = emailRegex.test(email) 
