@@ -1,4 +1,5 @@
 # Trip Atlas
+![Overall Design](./Design/Overall%20Design.drawio.svg)
 
 ## Requirements
 
