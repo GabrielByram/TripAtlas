@@ -15,7 +15,7 @@ Goals:
     * Steps
         - Find dataset for weather DONE
         - Parse dataset IN PROGRESS
-        - Set up MongoDB DB
+        - Set up MongoDB DB 
         - Load parsed dataset into DB
         - Determine area scope -- US counties DONE
         - Set up Main Page Front-End
