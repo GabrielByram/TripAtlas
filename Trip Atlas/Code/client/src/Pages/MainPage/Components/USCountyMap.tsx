@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import CountyWeatherData from "../../../../../Models/county-weather";
 import usCountiesGeoJSON from "../Maps/us-counties";
+import "./USCountiesMap.css"
 
 const USCountyMap = () => {
   const [countyData, setCountyData] = useState<CountyWeatherData[]>([]);
@@ -83,7 +84,12 @@ const getColorByTemperature = (
   };
 
   return (
-    <ComposableMap projection="geoAlbersUsa">
+    <ComposableMap
+      projection="geoAlbersUsa"
+      className="centered.svg"
+      //projectionConfig={{center:[0, 0], scale:700}}
+      //style={{ maxHeight: "70%", maxWidth: "70%" }}
+    >
       <Geographies geography={usCountiesGeoJSON}>
         {({ geographies }) =>
           geographies.map((geo) => {
