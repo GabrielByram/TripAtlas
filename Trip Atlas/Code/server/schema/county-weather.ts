@@ -1,9 +1,15 @@
-import mongoose from "mongoose";
+import { Schema } from "mongoose";
+import CountyWeatherData from "../../Models/county-weather";
 
-export const CountyWeatherSchema = new mongoose.Schema({
-    state: String,
-    county: String,
-    month: Number,
-    avgDailyMaxAirTemp: Number,
-    avgDailyMinAirTemp: Number,
+import mongoose from 'mongoose';
+
+const countyWeatherSchema = new mongoose.Schema({
+  _id: mongoose.Types.ObjectId,
+  AvgDailyMaxAirTempF: Number,
+  AvgDailyMinAirTempF: Number,
+  County: String,
+  Month: Number,
+  State: Number,
 });
+
+export default countyWeatherSchema;
