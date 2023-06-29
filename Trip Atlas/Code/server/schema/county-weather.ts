@@ -9,7 +9,7 @@ const countyWeatherSchema = new mongoose.Schema({
   AvgDailyMinAirTempF: Number,
   County: String,
   Month: Number,
-  State: String,
+  State: Number,
 });
 
 export default countyWeatherSchema;

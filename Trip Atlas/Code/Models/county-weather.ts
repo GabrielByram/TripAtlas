@@ -1,9 +1,9 @@
 interface CountyWeatherData {
-    state: string,
-    county: string,
-    month: number,
-    avgDailyMaxAirTemp: number,
-    avgDailyMinAirTemp: number,
+    State: number,
+    County: string,
+    Month: number,
+    AvgDailyMaxAirTempF: number,
+    AvgDailyMinAirTempF: number,
 };
 
 export default CountyWeatherData;

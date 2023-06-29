@@ -14,9 +14,9 @@ Goals:
 2. Filter locations on map based on weather
     * Steps
         - Find dataset for weather DONE
-        - Parse dataset IN PROGRESS
-        - Set up MongoDB DB 
-        - Load parsed dataset into DB
+        - Parse dataset DONE
+        - Set up MongoDB DB DONE
+        - Load parsed dataset into DB DONE
         - Determine area scope -- US counties DONE
         - Set up Main Page Front-End
             * Find and implement world map library IN PROGRESS
