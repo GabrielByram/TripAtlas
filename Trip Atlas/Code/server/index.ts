@@ -1,9 +1,43 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import { Request, Response } from 'express';
+import countyWeatherSchema from "./schema/county-weather"
 
 const app = express();
 const port = 3000;
 
-app.use(express.json()); // Add this middleware to parse request bodies as JSON
+const mongoose = require('mongoose');
+const cors = require('cors');
+
+app.use(express.json()); // Middleware to parse request bodies as JSON
+app.use(cors()); // Enable CORS for all routes
+
+const dbName = 'trip_atlas_geo';
+const url = `mongodb://127.0.0.1:27017/${dbName}`;
+const countyWeatherModel = mongoose.model('CountyWeather', countyWeatherSchema, 'county_weather_by_month');
+
+async function connectToDatabase() {
+  try {
+    // Connect the Express application to MongoDB
+    await mongoose.connect(url, { useNewUrlParser: true });
+    console.log('Connected to the database');
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    process.exit(1); // Exit the process if unable to connect to the database
+  }
+}
+
+// Define an Express route to access the collection
+app.get('/county-weather', async (req: Request, res: Response) => {
+  try {
+    console.log("COUNTY WEATHER ENDPOINT REACHED");
+    const documents = await countyWeatherModel.find({});
+    console.log(documents);
+    res.json(documents);
+  } catch (error) {
+    console.error('Error fetching documents:', error);
+    res.status(500).send('Error fetching documents');
+  }
+});
 
 app.post('/api/checkEmail', (req, res) => {
   const { email } = req.body;
@@ -36,6 +70,10 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, World!');
 });
 
+// Connect to the database
+connectToDatabase();
+
+// Start the Express server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Express server listening on port ${port}`);
 });
