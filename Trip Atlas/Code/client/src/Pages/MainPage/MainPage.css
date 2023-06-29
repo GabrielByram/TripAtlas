@@ -1,0 +1,7 @@
+.container {
+    max-width: 70vw;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }

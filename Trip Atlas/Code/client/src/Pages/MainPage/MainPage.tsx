@@ -1,8 +1,11 @@
 import USCountyMap from "./Components/USCountyMap";
+import "./MainPage.css"
 
 function MainPage() {
   return (
-    <USCountyMap />
+    <div className="container">
+      <USCountyMap />
+    </div>
   );
 }
 
