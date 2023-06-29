@@ -1,4 +1,4 @@
-State,County,Month,Avg Daily Max Air Temperature (F),Avg Daily Min Air Temperature (F)
+State,County,Month,AvgDailyMaxAirTempF,AvgDailyMinAirTempF
 Alabama,"Autauga County, AL",1,54.3,35.83
 Alabama,"Autauga County, AL",2,58.61,39.15
 Alabama,"Autauga County, AL",3,66,45.22

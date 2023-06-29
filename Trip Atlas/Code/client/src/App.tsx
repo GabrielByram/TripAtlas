@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
-import MainPage from './Pages/MainPage';
+import MainPage from './Pages/MainPage/MainPage';
 import LoginPage from './Pages/LoginPage';
 import AccountPage from './Pages/AccountPage';
 
@@ -22,13 +22,9 @@ function App() {
         <Navbar bg="dark" variant="dark" expand="lg" className="Navbar">
           <Navbar.Brand as={Link} to="/" onClick={handleNavLinkClick}>Trip Atlas</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbar-nav" />
-          <Navbar.Collapse id="navbar-nav">
-            <Nav>
-              <Nav.Link as={Link} to="/account" onClick={handleNavLinkClick}>Account</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
           <Navbar.Collapse id="navbar-nav" className="justify-content-end">
             <Nav>
+              <Nav.Link as={Link} to="/account" onClick={handleNavLinkClick}>Account</Nav.Link>
               <Nav.Link as={Link} to="/login" onClick={handleNavLinkClick}>Login</Nav.Link>
             </Nav>
           </Navbar.Collapse>

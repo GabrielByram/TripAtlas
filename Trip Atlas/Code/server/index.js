@@ -13,14 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const county_weather_1 = require("./schema/county-weather");
+const county_weather_1 = __importDefault(require("./schema/county-weather"));
 const app = (0, express_1.default)();
 const port = 3000;
-app.use(express_1.default.json()); // middleware to parse request bodies as JSON
 const mongoose = require('mongoose');
+const cors = require('cors');
+app.use(express_1.default.json()); // Middleware to parse request bodies as JSON
+app.use(cors()); // Enable CORS for all routes
 const dbName = 'trip_atlas_geo';
 const url = `mongodb://127.0.0.1:27017/${dbName}`;
-const countyWeather = mongoose.model("CountyWeather", county_weather_1.CountyWeatherSchema);
+const countyWeatherModel = mongoose.model('CountyWeather', county_weather_1.default, 'county_weather_by_month');
 function connectToDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -37,7 +39,9 @@ function connectToDatabase() {
 // Define an Express route to access the collection
 app.get('/county-weather', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const documents = yield countyWeather.find({});
+        console.log("COUNTY WEATHER ENDPOINT REACHED");
+        const documents = yield countyWeatherModel.find({});
+        console.log(documents);
         res.json(documents);
     }
     catch (error) {

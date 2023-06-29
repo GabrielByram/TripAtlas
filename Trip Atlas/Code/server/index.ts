@@ -1,17 +1,19 @@
 import express from 'express';
 import { Request, Response } from 'express';
-import { CountyWeatherSchema } from "./schema/county-weather"
+import countyWeatherSchema from "./schema/county-weather"
 
 const app = express();
 const port = 3000;
 
-app.use(express.json()); // middleware to parse request bodies as JSON
-
 const mongoose = require('mongoose');
+const cors = require('cors');
+
+app.use(express.json()); // Middleware to parse request bodies as JSON
+app.use(cors()); // Enable CORS for all routes
 
 const dbName = 'trip_atlas_geo';
 const url = `mongodb://127.0.0.1:27017/${dbName}`;
-const countyWeather = mongoose.model("CountyWeather", CountyWeatherSchema);
+const countyWeatherModel = mongoose.model('CountyWeather', countyWeatherSchema, 'county_weather_by_month');
 
 async function connectToDatabase() {
   try {
@@ -27,7 +29,9 @@ async function connectToDatabase() {
 // Define an Express route to access the collection
 app.get('/county-weather', async (req: Request, res: Response) => {
   try {
-    const documents = await countyWeather.find({});
+    console.log("COUNTY WEATHER ENDPOINT REACHED");
+    const documents = await countyWeatherModel.find({});
+    console.log(documents);
     res.json(documents);
   } catch (error) {
     console.error('Error fetching documents:', error);
