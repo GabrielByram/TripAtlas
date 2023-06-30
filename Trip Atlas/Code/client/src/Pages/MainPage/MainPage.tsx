@@ -52,7 +52,7 @@ function MainPage() {
           />
         </div>
       </Menu>
-      <div className="container">
+      <div>
         <USCountyMap countyData={countyData} selectedMonth={selectedMonth} />
       </div>
     </div>
