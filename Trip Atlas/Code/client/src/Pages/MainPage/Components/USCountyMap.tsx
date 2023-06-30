@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import CountyWeatherData from "../../../../../Models/county-weather";
-import MapTooltip from "../../../../../Models/map-tooltip";
 import usCountiesGeoJSON from "../Maps/us-counties";
 import "./USCountiesMap.css";
 
@@ -98,11 +97,7 @@ const USCountyMap = (props: IProps) => {
           geographies.map((geo) => {
             let { NAME, STATE } = geo.properties;
             STATE = parseInt(STATE);
-            const countyDataForCounty = countyDataMap[NAME];
             const county = countyDataMap[`${NAME}, ${STATE}`]?.[selectedMonth];
-            if (!county && STATE != 5 && (STATE == 9 || STATE == 4 || STATE == 5 || STATE == 28)) {
-                console.log(`geojson Name: ${NAME} State: ${STATE}`)
-            }
             const temperature = county ? county.AvgDailyMaxAirTempF : null;
 
             return (
