@@ -1,49 +1,53 @@
 import { useEffect, useState } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import CountyWeatherData from "../../../../../Models/county-weather";
+import MapTooltip from "../../../../../Models/map-tooltip";
 import usCountiesGeoJSON from "../Maps/us-counties";
+import "./USCountiesMap.css";
 
-const USCountyMap = () => {
-  const [countyData, setCountyData] = useState<CountyWeatherData[]>([]);
+// Define the color scale based on temperature values
+const temperatureColorScale = {
+  min: 10,
+  max: 107,
+  colors: ["#1c03fc", "#fc0303"],
+};
+
+interface IProps {
+  countyData: CountyWeatherData[];
+  selectedMonth: number;
+}
+
+const USCountyMap = (props: IProps) => {
+  const [selectedMonth, setSelectedMonth] = useState<number>(1);
+  const [countyDataMap, setCountyDataMap] = useState<Record<string, Record<number, CountyWeatherData>>>({});
+  const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
+  const [selectedTemperature, setSelectedTemperature] = useState<number | string | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    getCountyWeather()
-      .then((data) => {
-        setCountyData(data);
-        console.log(countyData);
-      })
-      .catch((error) => {
-        console.error("Error fetching county data:", error);
-      });
-  }, []);
+    setSelectedMonth(props.selectedMonth);
+    preprocessCountyData(props.countyData);
+  }, [props.selectedMonth, props.countyData]);
 
-  const getCountyWeather = async () => {
-    try {
-      console.log("GETTING COUNTY WEATHER");
-      const response = await fetch("http://localhost:3000/county-weather");
-      const data = await response.json();
-      return data as CountyWeatherData[];
-    } catch (error) {
-      throw new Error("Failed to fetch county weather data");
-    }
+  const preprocessCountyData = (countyData: CountyWeatherData[]) => {
+    const dataMap: Record<string, Record<number, CountyWeatherData>> = {};
+    countyData.forEach((county) => {
+      const key = `${county.County}, ${county.State}`;
+      if (!dataMap[key]) {
+        dataMap[key] = {};
+      }
+      dataMap[key][county.Month] = county;
+    });
+    setCountyDataMap(dataMap);
   };
 
-// Function to determine the fill color based on temperature
-const getColorByTemperature = (
-    temperature: number,
-    colorScale: { min: number; max: number; colors: string[] }
-  ) => {
-    const { min, max, colors } = colorScale;
+  const getColorByTemperature = (temperature: number) => {
+    const { min, max, colors } = temperatureColorScale;
     const normalizedTemperature = (temperature - min) / (max - min);
-  
-    // Interpolate between the colors based on the normalized temperature
     const colorIndex = Math.floor(normalizedTemperature * (colors.length - 1));
     const colorPercentage = normalizedTemperature * (colors.length - 1) - colorIndex;
     const color1 = colors[colorIndex];
     const color2 = colors[colorIndex + 1];
-    console.log(`color 1: ${color1}; color2: ${color2}`)
-  
-    // Blend the colors based on the colorPercentage
     const blendedColor = blendColors(color1, color2, colorPercentage);
     return blendedColor;
   };
@@ -75,48 +79,67 @@ const getColorByTemperature = (
     return hex.length === 1 ? `0${hex}` : hex;
   };
   
-  // Define the color scale based on temperature values
-  const temperatureColorScale = {
-    min: 10,
-    max: 90,
-    colors: ["#1c03fc", "#fc0303"],
+  const handleClick = (geo: any, event: any) => {
+    const { NAME, STATE } = geo.properties;
+    const county = countyDataMap[`${NAME}, ${STATE}`]?.[selectedMonth];
+    const temperature = county ? county.AvgDailyMaxAirTempF : null;
+  
+    setSelectedCounty(`${NAME}, ${STATE}`);
+    setSelectedTemperature(temperature !== null ? temperature.toFixed(1) : 'N/A');
+    setTooltipPosition({ x: event.clientX, y: event.clientY });
   };
 
   return (
-    <ComposableMap projection="geoAlbersUsa">
+    <div>
+        <div className="container">
+        <ComposableMap projection="geoAlbersUsa" className="centered.svg">
       <Geographies geography={usCountiesGeoJSON}>
         {({ geographies }) =>
           geographies.map((geo) => {
-            //console.log(countyData);
-            //console.log(geo);
-            const { NAME, STATE } = geo.properties;
-            //console.log(NAME);
-            //console.log(STATE);
-            const county = countyData.find(
-              (c) => c.County === NAME && c.State == STATE
-            );
-            if (county?.State == 22) {
-                console.log(STATE)
+            let { NAME, STATE } = geo.properties;
+            STATE = parseInt(STATE);
+            const countyDataForCounty = countyDataMap[NAME];
+            const county = countyDataMap[`${NAME}, ${STATE}`]?.[selectedMonth];
+            if (!county && STATE != 5 && (STATE == 9 || STATE == 4 || STATE == 5 || STATE == 28)) {
+                console.log(`geojson Name: ${NAME} State: ${STATE}`)
             }
-            //console.log(`CountyData Name: ${county?.County}; GeoJSON Name: ${NAME}; CountyData State Code: ${county?.State}; GeoJSON State Code: ${STATE}`);
             const temperature = county ? county.AvgDailyMaxAirTempF : null;
-            //console.log(temperature);
 
             return (
-              <Geography
+                <Geography
                 key={geo.rsmKey}
                 geography={geo}
                 fill={
-                  temperature
-                    ? getColorByTemperature(temperature, temperatureColorScale)
-                    : "#CCCCCC"
+                  selectedCounty === `${NAME}, ${STATE}`
+                    ? 'lightblue' // Apply a different color when selected
+                    : temperature
+                    ? getColorByTemperature(temperature)
+                    : '#CCCCCC'
                 }
+                onClick={(event) => handleClick(geo, event)} // Add the click event handler
               />
             );
           })
         }
       </Geographies>
     </ComposableMap>
+    </div>
+    
+    {selectedCounty && (
+        <div
+          className="selected-info"
+          style={{ top: tooltipPosition.y, left: tooltipPosition.x }}
+        >
+          <h6 style={{marginBottom:"0.1rem"}}>
+            County: {
+                selectedCounty.substring(0, selectedCounty.indexOf(",")) // Chop off state codes from county names
+            }
+            <br />
+            Avg Temperature: {selectedTemperature}°F
+          </h6>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,0 +1,15 @@
+.selected-info {
+    position: fixed;
+    padding: 7px;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+
+.container {
+    max-width: 70vw;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
