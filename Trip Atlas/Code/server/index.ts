@@ -15,9 +15,9 @@ const dbName = 'trip_atlas_geo';
 const url = `mongodb://127.0.0.1:27017/${dbName}`;
 const countyWeatherModel = mongoose.model('CountyWeather', countyWeatherSchema, 'county_weather_by_month');
 
+// Connect the Express application to MongoDB
 async function connectToDatabase() {
   try {
-    // Connect the Express application to MongoDB
     await mongoose.connect(url, { useNewUrlParser: true });
     console.log('Connected to the database');
   } catch (error) {
@@ -29,9 +29,7 @@ async function connectToDatabase() {
 // Define an Express route to access the collection
 app.get('/county-weather', async (req: Request, res: Response) => {
   try {
-    console.log("COUNTY WEATHER ENDPOINT REACHED");
     const documents = await countyWeatherModel.find({});
-    console.log(documents);
     res.json(documents);
   } catch (error) {
     console.error('Error fetching documents:', error);

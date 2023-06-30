@@ -21,7 +21,7 @@ with open(input_csv_file, "r", encoding=ANSI, newline="") as file:
         max_temp = row["AvgDailyMaxAirTempF"].strip()
         min_temp = row["AvgDailyMinAirTempF"].strip()
         
-        # Only append if month and month code are not empty
+        # Only append if month is not empty
         if month:
             cleaned_data.append({
                 "State": state,
