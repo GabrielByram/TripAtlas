@@ -91,33 +91,33 @@ const USCountyMap = (props: IProps) => {
   return (
     <div>
         <div className="container">
-        <ComposableMap projection="geoAlbersUsa" className="centered.svg">
-      <Geographies geography={usCountiesGeoJSON}>
-        {({ geographies }) =>
-          geographies.map((geo) => {
-            let { NAME, STATE } = geo.properties;
-            STATE = parseInt(STATE);
-            const county = countyDataMap[`${NAME}, ${STATE}`]?.[selectedMonth];
-            const temperature = county ? county.AvgDailyMaxAirTempF : null;
+            <ComposableMap projection="geoAlbersUsa" className="centered.svg">
+                 <Geographies geography={usCountiesGeoJSON}>
+                    {({ geographies }) =>
+                    geographies.map((geo) => {
+                        let { NAME, STATE } = geo.properties;
+                        STATE = parseInt(STATE);
+                        const county = countyDataMap[`${NAME}, ${STATE}`]?.[selectedMonth];
+                        const temperature = county ? county.AvgDailyMaxAirTempF : null;
 
-            return (
-                <Geography
-                key={geo.rsmKey}
-                geography={geo}
-                fill={
-                  selectedCounty === `${NAME}, ${STATE}`
-                    ? 'lightblue' // Apply a different color when selected
-                    : temperature
-                    ? getColorByTemperature(temperature)
-                    : '#CCCCCC'
+                        return (
+                            <Geography
+                                key={geo.rsmKey}
+                                geography={geo}
+                                fill={
+                                selectedCounty === `${NAME}, ${STATE}`
+                                    ? 'lightblue' // Apply a different color when selected
+                                    : temperature
+                                    ? getColorByTemperature(temperature)
+                                    : '#CCCCCC'
+                                }
+                                onClick={(event) => handleClick(geo, event)} // Add the click event handler
+                            />
+                        );
+                    })
                 }
-                onClick={(event) => handleClick(geo, event)} // Add the click event handler
-              />
-            );
-          })
-        }
-      </Geographies>
-    </ComposableMap>
+            </Geographies>
+        </ComposableMap>
     </div>
     
     {selectedCounty && (
